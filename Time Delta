@@ -1,0 +1,20 @@
+from datetime import datetime
+
+# Number of test cases
+t = int(input().strip())
+
+# Timestamp format
+fmt = "%a %d %b %Y %H:%M:%S %z"
+
+for _ in range(t):
+    t1 = input().strip()
+    t2 = input().strip()
+    
+    # Convert strings to datetime objects
+    dt1 = datetime.strptime(t1, fmt)
+    dt2 = datetime.strptime(t2, fmt)
+    
+    # Calculate absolute difference in seconds
+    diff = abs(int((dt1 - dt2).total_seconds()))
+    
+    print(diff)
