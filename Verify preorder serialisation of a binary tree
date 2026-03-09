@@ -1,0 +1,15 @@
+class Solution:
+    def isValidSerialization(self, preorder: str) -> bool:
+        nodes = preorder.split(",")
+        queue = deque(nodes)
+        slots = 1
+
+        while queue:
+            node = queue.popleft()
+            slots -= 1
+            if slots < 0:
+                return False
+            if node != "#":
+                slots += 2
+
+        return slots == 0
