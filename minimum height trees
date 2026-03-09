@@ -1,0 +1,31 @@
+from collections import deque
+
+
+class Solution:
+    def findMinHeightTrees(self, n: int, edges: List[List[int]]) -> List[int]:
+        if n == 1 or not edges:
+            return [0]
+
+        adj = [[] for _ in range(n)]
+        deg = [0] * n
+
+        for u, v in edges:
+            adj[u].append(v)
+            adj[v].append(u)
+            deg[u] += 1
+            deg[v] += 1
+        
+        leaves = deque(i for i in range(n) if deg[i] == 1)
+        remaining = n
+
+        while remaining > 2:
+            levelCount = len(leaves)
+            remaining -= levelCount
+            for _ in range(levelCount):
+                u = leaves.popleft()
+                for v in adj[u]:
+                    deg[v] -= 1
+                    if deg[v] == 1:
+                        leaves.append(v)
+        
+        return list(leaves)
