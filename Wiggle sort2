@@ -1,0 +1,28 @@
+class Solution:
+    def wiggleSort(self, nums: List[int]) -> None:
+        """
+        Do not return anything, modify nums in-place instead.
+        """
+        n = len(nums)
+        
+        # Step 1: Perform counting sort
+        count = [0] * 5001  # Since 0 <= nums[i] <= 5000
+        for num in nums:
+            count[num] += 1
+        
+        # Step 2: Generate sorted array using counts
+        sorted_nums = []
+        for i in range(5001):
+            sorted_nums.extend([i] * count[i])
+        
+        # Step 3: Place elements in wiggle pattern
+        mid = (n + 1) // 2
+        smaller_half = sorted_nums[:mid]
+        larger_half = sorted_nums[mid:]
+        
+        # Step 4: Fill nums array in wiggle pattern
+        for i in range(n):
+            if i % 2 == 0:
+                nums[i] = smaller_half[mid - 1 - i // 2]
+            else:
+                nums[i] = larger_half[len(larger_half) - 1 - i // 2]
