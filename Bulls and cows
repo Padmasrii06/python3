@@ -1,0 +1,25 @@
+class Solution:
+    def getHint(self, secret: str, guess: str) -> str:
+
+        # this is just an implementation of hashmap in Python, where maps all keys that haven't been initialized to 0. 
+        # This way, you don't have to check every time whether the key is present
+        secret_freq = defaultdict(int)
+        guess_freq = defaultdict(int)        
+
+        # another way of initializing a hash table with number of occurrences is using the Counter object in Python!
+        # secret_freq = Counter(guess)
+
+        bulls = 0
+
+        for i in range(len(secret)):
+            if secret[i] == guess[i]:
+                bulls += 1
+            else:
+                secret_freq[secret[i]] += 1
+                guess_freq[guess[i]] += 1
+        
+        cows = 0
+        for letter in secret_freq.keys():
+            cows += min(secret_freq[letter], guess_freq[letter])
+        
+        return str(bulls) + "A" + str(cows) + "B"
