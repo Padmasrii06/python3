@@ -1,0 +1,29 @@
+
+class Solution:
+    def decodeString(self, s: str) -> str:
+        st = []
+
+        for c in s:
+            if c == ']':  # Found end of an encoded section
+                sub = ''
+                count = ''
+                
+                # Extract the substring inside the brackets
+                while st and st[-1] != '[':
+                    sub = st.pop() + sub  # Reverse order
+                
+                st.pop()  # Remove the '['
+                
+                # Extract the number (multiplier)
+                while st and st[-1].isdigit():
+                    count = st.pop() + count  # Reverse order
+                
+                # Multiply the extracted substring and push back the expanded version
+                ans = int(count) * sub
+                st.extend(ans)  # Push characters back individually
+                
+                continue
+            
+            st.append(c)  # Push characters, numbers, and '['
+
+        return ''.join(st)  # Join everything to form the final string
