@@ -1,0 +1,23 @@
+class Solution:
+    def largestDivisibleSubset(self, nums: List[int]) -> List[int]:
+        if not nums:
+            return []
+
+        nums.sort()
+        n = len(nums)
+        dp = [[num] for num in nums]  # Each number starts with its own subset
+
+        for i in range(n):
+            for j in range(i):
+                if nums[i] % nums[j] == 0 and len(dp[j]) + 1 > len(dp[i]):
+                    # Extend the subset ending at nums[j] with nums[i]
+                    dp[i] = dp[j] + [nums[i]]
+
+        # Return the longest subset found
+        return max(dp, key=len)
+            
+
+                    
+                
+
+        
