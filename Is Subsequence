@@ -1,0 +1,20 @@
+class Solution:
+    def isSubsequence(self, s: str, t: str) -> bool:
+        
+        # 2 pointers, 1 should browse s other should browse t
+
+        i = j = 0
+
+        while i < len(s) and j < len(t):
+            target = s[i]
+            while j < len(t) and t[j] != target:
+                j += 1
+            if j >= len(t):
+                break
+            else:
+                i += 1
+                j += 1
+        
+
+        return i == len(s)
+        
