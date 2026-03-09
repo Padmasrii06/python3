@@ -1,0 +1,56 @@
+import math
+
+class SegmentTree:
+    def __init__(self, inputArr):
+        self.inputArr = inputArr
+        self.n = len(inputArr)
+        height = math.ceil(math.log2(self.n))
+        numNodes = 2 * (2 ** height) - 1
+        self.segTree = [0]*numNodes
+        self.fillSegTree(0, self.n - 1, 0)
+
+    def fillSegTree(self, left, right, currNode):
+        if left == right:
+            self.segTree[currNode] = self.inputArr[left]
+            return self.segTree[currNode]
+        mid = (left + right) // 2
+        left_sum = self.fillSegTree(left, mid, currNode*2 + 1)
+        right_sum = self.fillSegTree(mid + 1, right, currNode*2 + 2)
+        self.segTree[currNode] = left_sum + right_sum
+        return self.segTree[currNode]
+        
+    def findSum(self, left, right, queryLeft, queryRight, currNode):
+        if queryLeft > right or queryRight < left:
+            return 0
+        if queryLeft <= left and right <= queryRight:
+            return self.segTree[currNode]
+        mid = (left + right) // 2
+        leftVal = self.findSum(left, mid, queryLeft, queryRight, currNode*2 + 1)
+        rightVal = self.findSum(mid+1, right, queryLeft, queryRight, currNode*2 + 2)
+        return leftVal + rightVal
+    
+    def updateValue(self, left, right, index, val, currNode):
+        if left == right:
+            self.segTree[currNode] = val
+            return
+        mid = (left + right) // 2
+        if index <= mid:
+            self.updateValue(left, mid, index, val, currNode*2 + 1)
+        else:
+            self.updateValue(mid + 1, right, index, val, currNode*2 + 2)
+        self.segTree[currNode] = self.segTree[currNode*2 + 1] + self.segTree[currNode*2 + 2]
+
+class NumArray:
+
+    def __init__(self, nums):
+        self.nums = nums
+        self.tree = SegmentTree(self.nums)
+        self.n = len(nums)
+
+    def update(self, index: int, val: int) -> None:
+        if val != self.nums[index]:
+            self.nums[index] = val
+            self.tree.updateValue(0, self.n -1, index, val, 0)
+
+    def sumRange(self, left: int, right: int) -> int:
+        return self.tree.findSum(0, self.n - 1, left, right, 0)
