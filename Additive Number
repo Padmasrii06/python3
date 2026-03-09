@@ -1,0 +1,17 @@
+class Solution:
+    def isAdditiveNumber(self, num: str) -> bool:
+        seq = []
+        def backtrack(num: str, cur: List[int]):
+            if not num:
+                return len(cur) >= 3
+
+            for i in range(1,len(num)+1):
+                if i > 1 and num[0] == "0": break
+                if len(cur) < 2 or int(num[:i]) == cur[-1] + cur[-2]:
+                    seq.append(int(num[:i]))
+                    if backtrack(num[i:],seq): return True
+                    seq.remove(int(num[:i]))
+
+            return False
+            
+        return backtrack(num,[])
