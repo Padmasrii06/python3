@@ -1,0 +1,12 @@
+class Solution:
+    def lastRemaining(self, n: int) -> int:
+        length, start, end, diff, left = n, 1, n, 1, True
+        while length > 1:
+            if left or length % 2:
+                start += diff
+            if not left or length % 2:
+                end -= diff
+            left = not left
+            length >>= 1
+            diff <<= 1
+        return start
