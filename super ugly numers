@@ -1,0 +1,20 @@
+import heapq
+from typing import List
+
+class Solution:
+    def nthSuperUglyNumber(self, n: int, primes: List[int]) -> int:
+        result = [1]
+        heap = [(p, p, 0) for p in primes]  # (value, prime, index_in_result)
+        heapq.heapify(heap)
+        
+        while len(result) < n:
+            val, prime, idx = heapq.heappop(heap)
+            
+            # Avoid duplicates
+            if val != result[-1]:
+                result.append(val)
+            
+            # Push next candidate
+            heapq.heappush(heap, (result[idx+1] * prime, prime, idx+1))
+        
+        return result[-1]
