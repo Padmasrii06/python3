@@ -1,0 +1,11 @@
+class Solution:
+    def findTheDifference(self, s: str, t: str) -> str:
+
+        res=0
+
+        for ch in s: # XOR in every character from s
+            res ^= ord(ch)
+        for ch in t: # XOR in every character from t
+            res ^= ord(ch)
+        return chr(res) # Remaining value in res is the code point of the extra character
+        
