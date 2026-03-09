@@ -1,0 +1,24 @@
+class Solution:
+    def findItinerary(self, ticket: List[List[str]]) -> List[str]:
+        def dfs(src):
+            if len(res) == len(ticket) + 1:
+                return True
+            if src not in graph:
+                return False
+            temp = list(graph[src])
+            for i, node in enumerate(graph[src]):
+                graph[src].pop(i)
+                res.append(node)
+                if dfs(node): return True
+                graph[src].insert(i, node)
+                res.pop()
+            return False    
+            
+        ticket.sort()
+        graph = defaultdict(list)
+        for src, dst in ticket:
+            graph[src].append(dst)
+        res = ["JFK"]
+        dfs("JFK")
+        return res
+                
