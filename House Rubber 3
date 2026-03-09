@@ -1,0 +1,28 @@
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def rob(self, root: Optional[TreeNode]) -> int:
+
+        maps=dict()
+        def dfs(roots,isTrue):
+            nonlocal maps
+            if roots:
+                if (roots,isTrue) in maps:
+                    return maps[(roots,isTrue)]
+                if isTrue:
+                    maps[(roots,isTrue)]=dfs(roots.left,False)+dfs(roots.right,False)
+                else:
+                    pos1=roots.val+dfs(roots.left,True)+dfs(roots.right,True)
+                    pos2=dfs(roots.left,False)+dfs(roots.right,False)
+                    maps[(roots,isTrue)]=max(pos1,pos2)
+                return maps[(roots,isTrue)] 
+            else:
+                return 0
+        return dfs(root,False)
+
+
+        
