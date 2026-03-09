@@ -1,0 +1,10 @@
+class Solution:
+    def countNumbersWithUniqueDigits(self, n: int) -> int:
+        def n_count(n):
+            prod=9
+            if n==0:
+                return 1
+            for i in range(9,(10-n),-1):
+                prod=prod*i
+            return prod+n_count(n-1)
+        return n_count(n)
