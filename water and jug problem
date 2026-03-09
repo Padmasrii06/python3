@@ -1,0 +1,3 @@
+class Solution:
+    def canMeasureWater(self, jug1: int, jug2: int, target: int) -> bool:
+        return jug1 + jug2 >= target and target % math.gcd(jug1, jug2) == 0
