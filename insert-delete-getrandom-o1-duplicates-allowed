@@ -1,0 +1,48 @@
+# from collections import defaultdict
+class RandomizedCollection:
+
+    def __init__(self):
+        self.data: dict[int] = dict()
+        self.refs: dict[set] = defaultdict(set)
+        self.length: int = 0
+
+    def insert(self, val: int) -> bool:
+        is_not_present: bool = True
+        if val in self.refs:
+            self.refs[val].add(self.length)
+            is_not_present = False
+        else:
+            self.refs[val] = {self.length}
+        self.data[self.length] = val
+        self.length += 1
+        return is_not_present
+
+    def remove(self, val: int) -> bool:
+
+        if val in self.refs:
+            k: int = self.refs[val].pop()
+            if len(self.refs[val]) == 0:
+                del self.refs[val]
+            self.length -= 1
+            v: int = self.data[self.length]
+            if self.length != k:
+                self.refs[v].remove(self.length)
+                self.refs[v].add(k)
+                self.data[k] = v
+            del self.data[self.length]
+            return True
+
+        return False
+
+    def getRandom(self) -> int:
+        if self.length == 0:
+            return
+        n = random.randint(0, self.length-1)
+        return self.data[n]
+
+
+# Your RandomizedCollection object will be instantiated and called as such:
+# obj = RandomizedCollection()
+# param_1 = obj.insert(val)
+# param_2 = obj.remove(val)
+# param_3 = obj.getRandom()
