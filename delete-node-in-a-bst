@@ -1,0 +1,42 @@
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def deleteNode(self, root: Optional[TreeNode], key: int) -> Optional[TreeNode]:
+        # Time: O(h), Space: O(h) where h = height of tree
+        # Base case
+        if not root:
+            return None 
+        
+        # Find the node to delete
+        if root.val < key:
+            # Key is bigger, so it must be in the right subtree
+            root.right = self.deleteNode(root.right, key)
+        elif root.val > key:
+            # Key is smaller, so it must be in the left subtree
+            root.left = self.deleteNode(root.left, key)
+        else:
+            # found the node! Now we delete it based on its children
+            
+            # Case 1: Node has no left child (0 or 1 child)
+            if not root.left:
+                return root.right 
+            # Case 2: Node has no right child (exactly 1 child on left)
+            if not root.right:
+                return root.left
+            
+            # Case 3: Node has TWO children: replace the node's value with the smallest value in right subtree because it's guaranteed to be larger than all left nodes and smaller than all other right nodes so BST property is maintained. 
+            min_node = self.findMin(root.right)
+            root.val = min_node.val
+            root.right = self.deleteNode(root.right, min_node.val)
+        
+        return root
+
+    def findMin(self, node):
+        while node.left:
+            node = node.left 
+        return node
+         
