@@ -1,0 +1,4 @@
+class Solution:
+    def fib(self, n: int) -> int:
+        x = sqrt(5)
+        return int(1/x*(((1+x)/2)**n - ((1-x)/2)**n))
