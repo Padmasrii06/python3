@@ -1,0 +1,12 @@
+class Solution:
+    def numberOfArithmeticSlices(self, nums: List[int]) -> int:
+        N = len(nums)
+        c = Counter()
+        res = 0
+        for j in range(N):
+            for i in range(j):
+                diff = nums[j] - nums[i]
+                res += c[(i, diff)]
+                c[(j, diff)] += c[(i, diff)] + 1
+ 
+        return res
