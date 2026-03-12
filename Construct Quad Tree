@@ -1,0 +1,20 @@
+class Solution:
+    def construct(self, grid: List[List[int]]) -> 'Node':
+        def helper(start, edge):
+            start_i, start_j = start
+            if edge == 1:
+                return Node(grid[start_i][start_j], True, None, None, None, None)
+            else:
+                topleft_start = (start_i, start_j)
+                topright_start = (start_i, start_j+edge//2)
+                botleft_start = (start_i+edge//2, start_j)
+                botright_start = (start_i+edge//2, start_j+edge//2)
+                topleft = helper(topleft_start, edge//2)
+                topright = helper(topright_start, edge//2)
+                botleft = helper(botleft_start, edge//2)
+                botright = helper(botright_start, edge//2)
+                if topleft.isLeaf and topright.isLeaf and botleft.isLeaf and botright.isLeaf and topleft.val == topright.val == botleft.val == botright.val:
+                    return Node(topleft.val, True, None, None, None, None)
+                else:
+                    return Node(2, False, topleft, topright, botleft, botright)
+        return helper((0, 0), len(grid))
