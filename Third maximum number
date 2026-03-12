@@ -1,0 +1,11 @@
+import heapq
+class Solution:
+    def thirdMax(self, nums: List[int]) -> int:
+        max_heap = [-n for n in set(nums)]  
+        heapq.heapify(max_heap)
+        if len(max_heap)<3:
+            return -max_heap[0]
+        for i in range(3):
+            ans=-heapq.heappop(max_heap)
+            i+=1
+        return ans
