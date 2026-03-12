@@ -1,0 +1,14 @@
+class Solution:
+    def findDuplicates(self, nums: List[int]) -> List[int]:
+        cos = []
+        cost = set()
+
+        for num in nums:
+            if num not in cost:
+                cost.add(num)
+            else:
+                cos.append(num)
+
+        return cos
+        
+        
