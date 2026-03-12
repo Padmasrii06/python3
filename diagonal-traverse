@@ -1,0 +1,22 @@
+class Solution:
+    def findDiagonalOrder(self, mat: List[List[int]]) -> List[int]:
+        max_row = len(mat) - 1
+        max_col = len(mat[0]) - 1
+        max_sum = max_row + max_col
+
+        ret = []
+        for s in range(max_sum + 1):
+            max_row_current = min(max_row, s)
+            max_col_current = min(max_col, s)
+            min_row_current = s - max_col_current
+
+            if s % 2 != 0:
+                for i in range(min_row_current, max_row_current + 1):
+                    j = s - i
+                    ret.append(mat[i][j])
+            else:
+                for i in range(max_row_current, min_row_current - 1, -1):
+                    j = s - i
+                    ret.append(mat[i][j])
+
+        return ret
