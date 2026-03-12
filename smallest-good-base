@@ -1,0 +1,32 @@
+class Solution:
+    def smallestGoodBase(self, n):
+        def is_valid(base):
+            total = sum(base**i for i in range(length))
+            return n - total
+
+        n = int(n)
+        N = len(bin(n)[2:])
+
+        for length in range(N,0,-1):
+            low, high = 2, n-1
+            while low <= high:
+                mid = (low + high)//2
+
+                v = is_valid(mid)
+
+                if v < 0:
+                    high = mid - 1
+                elif v > 0:
+                    low = mid + 1
+                else:
+                    return str(mid)
+
+
+
+
+        
+
+
+
+        
+        
