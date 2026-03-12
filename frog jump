@@ -1,0 +1,22 @@
+class Solution:
+    def canCross(self, stones: List[int]) -> bool:
+        visited = set()
+        def dfs(idx, prev):
+            if idx == len(stones) - 1:
+                return True
+            if (idx, prev) in visited:
+                return False
+            visited.add((idx, prev))
+            for j in range(max(prev-1, 0), prev+2):
+                if stones[idx] + j <= stones[-1]:
+                    i = bisect_left(stones, stones[idx] + j)
+                    if stones[i] == stones[idx] + j and dfs(i, j):
+                        return True
+            return False
+        if len(stones) == 1:
+            return True
+        if stones[1] == 1:
+            return dfs(1, 1)
+        return False
+
+            
