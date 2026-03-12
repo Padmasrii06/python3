@@ -1,0 +1,15 @@
+class Solution:
+    def checkSubarraySum(self, nums: List[int], k: int) -> bool:
+        result = False
+        dict_1 = {0:-1}
+        sum_1 = 0
+        for i in range(len(nums)):
+            sum_1 += nums[i]
+            divide = sum_1 % k
+            if divide not in dict_1:
+                dict_1[divide] = i
+            else:
+                if i - dict_1[divide] > 1:
+                    result = True
+                    break
+        return result
