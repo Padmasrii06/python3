@@ -1,0 +1,19 @@
+class Solution:
+    def findAnagrams(self, s: str, p: str) -> List[int]:
+        size = len(p)
+        res = []
+        count_s = [0] * 26
+        count_p = [0] * 26
+        left = 0
+
+        for i in range(size):
+            count_p[ord(p[i]) - 97] += 1
+
+        for right in range(len(s)):
+            count_s[ord(s[right]) - 97] += 1
+            while right-left+1 >= size:
+                if count_s == count_p and right-left+1 == size:
+                    res.append(left)
+                count_s[ord(s[left]) - 97] -= 1
+                left += 1
+        return res
