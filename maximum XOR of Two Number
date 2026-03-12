@@ -1,0 +1,25 @@
+class Solution:
+    def findMaximumXOR(self, nums: List[int]) -> int:
+        K = 31
+        root = {}
+        for num in nums:
+            node = root
+            for k in range(K, -1, -1):
+                b = (num >> k) & 1
+                if b not in node:
+                    node[b] = {}
+                node = node[b]
+
+        ans = 0
+        for num in nums:
+            cur = 0
+            node = root
+            for k in range(K, -1, -1):
+                b = (num >> k) & 1
+                if 1-b in node:
+                    node = node[1-b]
+                    cur |= 1 << k
+                else:
+                    node = node[b]
+            ans = max(ans, cur)
+        return ans
