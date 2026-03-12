@@ -1,0 +1,14 @@
+class Solution:
+    def findMinMoves(self, machines: List[int]) -> int:
+        res = c = 0
+        if (sum(machines)%len(machines)) != 0 :
+            return -1
+        a = int(sum(machines)/len(machines))
+        for i in machines :
+            diff = i - a
+            c += diff
+            res = max(abs(c),diff,res)
+        return res    
+
+
+        
