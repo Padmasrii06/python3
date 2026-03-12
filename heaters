@@ -1,0 +1,11 @@
+class Solution:
+	def findRadius(self, houses: List[int], heaters: List[int]) -> int:
+		stack1=[]
+		stack2=[]
+		for i in houses:
+			for j in heaters:
+				tem=abs(i-j)
+				stack2.append(tem)
+			stack1.append(min(stack2))
+			stack2=[]
+		return max(stack1)
