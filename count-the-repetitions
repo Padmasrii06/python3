@@ -1,0 +1,30 @@
+class Solution:
+    def getMaxRepetitions(self, a: str, n1: int, b: str, n2: int) -> int:
+        cnt_a = 0
+        cnt_b = 0
+        m, n = len(a), len(b)
+        f = {}
+        i = 0
+        while cnt_a < n1:
+            j = 0
+            while j < n:
+                while i < m and a[i] != b[j]:
+                    i = i + 1
+                if i == m:
+                    i = 0
+                    cnt_a += 1
+                    if cnt_a >= n1:
+                        return cnt_b // n2
+                    continue
+                i, j = i + 1, j + 1
+            cnt_b += 1
+            if i in f:
+                db = cnt_b - f[i][0]
+                da = cnt_a - f[i][1]
+                while cnt_a + da < n1:
+                    cnt_a += da
+                    cnt_b += db
+                f = {}
+                continue
+            f[i] = [cnt_b, cnt_a]
+        return cnt_b // n2
