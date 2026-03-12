@@ -1,0 +1,8 @@
+class Solution:
+    def findLUSlength(self, a: str, b: str) -> int:
+        n = len(a)
+        if  len(b) != n:
+            return max(n, len(b))
+        if a == b:
+            return -1
+        return n
