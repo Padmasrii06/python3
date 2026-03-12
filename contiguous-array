@@ -1,0 +1,18 @@
+class Solution:
+    def findMaxLength(self, nums: List[int]) -> int:
+        one, zero = 0, 0
+        diff_index = {}
+        res = 0
+        for i, n  in enumerate(nums):
+            if n == 1:
+                one += 1
+            else:
+                zero += 1
+            diff = one - zero
+            if diff == 0:
+                res = max(res, i + 1)
+            elif diff not in diff_index:
+                diff_index[diff] = i
+            else:
+                res = max(res, i - diff_index[diff])
+        return res
