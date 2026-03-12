@@ -1,0 +1,23 @@
+from typing import List
+
+class Solution:
+    def findLongestWord(self, s: str, dictionary: List[str]) -> str:
+        
+        def getCommon(s1, s2):
+            i, j = 0, 0
+            common = ''
+            while i < len(s1) and j < len(s2):
+                if s1[i] == s2[j]:
+                    common += s1[i]
+                    j += 1
+                i += 1
+            return common
+
+        res = ''
+        for word in dictionary:
+            helper = getCommon(s, word)
+            # Check if it's a valid subsequence and better result
+            if helper == word:
+                if len(helper) > len(res) or (len(helper) == len(res) and helper < res):
+                    res = helper
+        return res
