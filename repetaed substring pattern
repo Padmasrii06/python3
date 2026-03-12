@@ -1,0 +1,39 @@
+class Solution:
+    def repeatedSubstringPattern(self, s: str) -> bool:
+        # KMP
+        nex = self.buildNext(s)
+        size = len(s)
+        if nex[-1] > size - nex[-1]:
+            sub = s[:size - nex[-1]]
+            size_sub = size - nex[-1]
+        else:
+            sub = s[-nex[-1]:]
+            size_sub = nex[-1]
+        if size_sub > 0 and size > size_sub and size % size_sub == 0:
+            block_i = 0
+            while block_i + 1 <= size // size_sub - 1:
+                if s[(block_i)*size_sub:(block_i + 1)*size_sub] == sub:
+                    block_i += 1
+                else:
+                    return False
+            return True
+        return False
+
+    def buildNext(self, s):
+        nex = [0]
+        pre_len = nex[-1]
+        size = len(s)
+        i = 1
+        while i < size:
+            if s[i] == s[pre_len]:
+                pre_len += 1
+                nex.append(pre_len)
+                i += 1
+            else:
+                if pre_len == 0:
+                    nex.append(0)
+                    i += 1
+                else:
+                    pre_len = nex[pre_len - 1]
+
+        return nex
