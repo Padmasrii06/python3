@@ -1,0 +1,9 @@
+class Solution:
+    def validIPAddress(self, IP: str) -> str:
+        if ':' in IP:  # IPv6 check
+            blocks = IP.split(':')
+            return "IPv6" if len(blocks) == 8 and all(1 <= len(b) <= 4 and all(c in '0123456789abcdefABCDEF' for c in b) for b in blocks) else "Neither"
+        elif '.' in IP:  # IPv4 check
+            blocks = IP.split('.')
+            return "IPv4" if len(blocks) == 4 and all(b.isdigit() and 0 <= int(b) <= 255 and str(int(b)) == b for b in blocks) else "Neither"
+        return "Neither"
