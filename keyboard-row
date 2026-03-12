@@ -1,0 +1,23 @@
+class Solution:
+    def findWords(self, words: List[str]) -> List[str]:
+
+        ans = list()
+
+        one = 'qwertyuiop'
+        two = 'asdfghjkl'
+        three = 'zxcvbnm'
+
+        for i in words:
+
+            a = i.lower()
+            if len(set(one + a)) == len(one):
+                ans.append(i)
+            elif len(set(two + a)) == len(two):
+                ans.append(i)
+            elif len(set(three + a)) == len(three):
+                ans.append(i)
+        
+        return ans
+
+
+        
