@@ -1,0 +1,21 @@
+from collections import defaultdict, Counter
+class Solution:
+    def fourSumCount(self, nums1: List[int], nums2: List[int], nums3: List[int], nums4: List[int]) -> int:
+        n1, n2, n3, n4= Counter(nums1), Counter(nums2), Counter(nums3), Counter(nums4)
+        a,b = defaultdict(int), defaultdict(int)
+
+        for k1, v1 in n1.items():
+            for k2, v2 in n2.items():
+                a[k1+k2] += v1 * v2
+            
+        for k3, v3 in n3.items():
+            for k4, v4 in n4.items():
+                b[k3+k4] += v3 * v4
+        
+        n_of_tuples = 0
+        for ka, va in a.items():
+            if -ka in b:
+                vb = b[-ka]
+                n_of_tuples += va*vb
+        
+        return n_of_tuples
