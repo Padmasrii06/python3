@@ -1,0 +1,18 @@
+class Solution:
+    def magicalString(self, n: int) -> int:
+        if(n<=3):return 1
+        cnt=1
+        l=3
+        var=1
+        q=deque()
+        q.append(2)
+        while(l<=n):
+            a=q.popleft()
+            for i in range(a):
+                if(l>=n):return cnt
+                l+=1
+                if(var==1):cnt+=1
+                q.append(var)
+            if(var==1):var=2
+            else: var=1
+        return cnt
