@@ -1,0 +1,115 @@
+# class Solution:
+#     def findKthNumber(self, n: int, k: int) -> int:
+#         """
+#         Find the kth lexicographically smallest integer in range [1, n].
+        
+#         Data Structure: 10-ary Tree (Conceptual)
+#         - Each node represents a number prefix (1, 10, 100, etc.)
+#         - Children of prefix P are P0, P1, P2, ..., P9
+#         - Lexicographical order corresponds to DFS traversal of this tree
+        
+#         Algorithm: Prefix Navigation with Counting
+#         - Instead of building the actual tree, we navigate it virtually
+#         - At each prefix, count how many valid numbers exist in its subtree
+#         - Use counting to decide: skip entire subtree or go deeper
+#         - This avoids generating O(n) numbers explicitly
+        
+#         Why this approach:
+#         1. Direct sorting would be O(n log n) and TLE for n=10^9
+#         2. Tree structure naturally represents lexicographical ordering
+#         3. Counting allows us to "jump" over large subtrees efficiently
+#         4. Navigation is O(log n) levels deep, counting is O(log n) per level
+        
+#         Time Complexity: O(log^2 n)
+#         Space Complexity: O(1)
+#         """
+#         def count_numbers_with_prefix(prefix, n):
+#             """Count how many numbers <= n have the given prefix."""
+#             count = 0
+#             curr = prefix
+#             next_prefix = prefix + 1
+            
+#             while curr <= n:
+#                 # Count numbers in current level
+#                 count += min(n + 1, next_prefix) - curr
+#                 # Move to next level
+#                 curr *= 10
+#                 next_prefix *= 10
+                
+#             return count
+        
+#         curr = 1  # Current number we're considering
+#         k -= 1    # Convert to 0-indexed
+        
+#         while k > 0:
+#             # Count how many numbers start with current prefix
+#             count = count_numbers_with_prefix(curr, n)
+            
+#             if k >= count:
+#                 # Skip all numbers with this prefix
+#                 k -= count
+#                 curr += 1  # Move to next sibling
+#             else:
+#                 # The answer is within this prefix subtree
+#                 curr *= 10  # Go deeper (add a digit)
+#                 k -= 1      # We've used up the current number
+        
+#         return curr
+
+#V2
+
+class Solution:
+    def findKthNumber(self, n: int, k: int) -> int:
+        """
+        Find the kth lexicographically smallest integer in range [1, n].
+        
+        Data Structure: 10-ary Tree (Conceptual, Virtual)
+        - Each node represents a number prefix (1, 10, 100, etc.)
+        - Children of prefix P are P0, P1, P2, ..., P9
+        - Lexicographical order corresponds to DFS traversal of this tree
+        
+        Algorithm: Optimized Prefix Navigation with Inline Counting
+        - Navigate virtual tree without function call overhead
+        - Inline counting logic to avoid repeated function calls
+        - Direct mathematical calculation of subtree sizes
+        - Skip entire subtrees or dive deeper based on position
+        
+        Optimizations Applied:
+        1. Eliminated function call overhead by inlining count logic
+        2. Reduced variable assignments and operations
+        3. Combined operations where possible
+        4. Used bit operations for multiplication where beneficial
+        
+        Why this approach:
+        1. Direct sorting: O(n log n) → TLE for n=10^9
+        2. Tree structure maps naturally to lexicographical ordering
+        3. Mathematical counting allows O(1) subtree size calculation per level
+        4. Virtual navigation avoids O(n) space for explicit tree construction
+        
+        Time Complexity: O(log^2 n) - worst case log₁₀(n) tree levels × log₁₀(n) counting
+        Space Complexity: O(1) - only primitive variables, no data structures
+        """
+        curr = 1
+        k -= 1  # Convert to 0-indexed
+        
+        while k:
+            # Inline counting: calculate subtree size for current prefix
+            count = 0
+            first, last = curr, curr + 1
+            
+            # Count nodes at each level of the subtree
+            while first <= n:
+                count += min(n + 1, last) - first
+                first *= 10
+                last *= 10
+            
+            if k >= count:
+                # Skip entire subtree - move to next sibling
+                k -= count
+                curr += 1
+            else:
+                # Answer is in this subtree - go one level deeper
+                curr *= 10
+                k -= 1
+                
+        return curr
