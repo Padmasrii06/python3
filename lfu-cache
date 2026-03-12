@@ -1,0 +1,121 @@
+import collections
+
+class Node:
+    def __init__(self, key, val):
+        self.key = key         # Cache key
+        self.val = val         # Cache value
+        self.freq = 1          # Frequency of access starts at 1
+        self.prev = None       # Previous node in doubly linked list
+        self.next = None       # Next node in doubly linked list
+
+
+class DLinkedList:
+    """
+    Doubly Linked List for maintaining LRU order within each frequency group.
+    Supports O(1) append and pop.
+    """
+    def __init__(self):
+        self._sentinel = Node(None, None)  # Dummy node for circular list
+        self._sentinel.next = self._sentinel.prev = self._sentinel
+        self._size = 0
+
+    def __len__(self):
+        return self._size
+
+    def append(self, node):
+        """
+        Insert node right after the sentinel (head of list).
+        Most recently used nodes are near the head.
+        """
+        node.next = self._sentinel.next
+        node.prev = self._sentinel
+        node.next.prev = node
+        self._sentinel.next = node
+        self._size += 1
+
+    def pop(self, node=None):
+        """
+        Remove the given node from the list. If node is None, remove from tail (LRU).
+        """
+        if self._size == 0:
+            return None
+
+        if not node:
+            node = self._sentinel.prev  # Least recently used node
+
+        node.prev.next = node.next
+        node.next.prev = node.prev
+        self._size -= 1
+        return node
+
+
+class LFUCache:
+    def __init__(self, capacity):
+        """
+        Initialize LFUCache with given capacity.
+        """
+        self._capacity = capacity       # Max number of items
+        self._size = 0                  # Current number of items
+
+        self._node = dict()             # key -> Node
+        self._freq = collections.defaultdict(DLinkedList)  # freq -> DLinkedList
+        self._minfreq = 0              # Minimum frequency in cache
+
+    def _update(self, node):
+        """
+        Helper function to update a node's frequency:
+        - Remove node from its current freq list
+        - Add it to freq + 1 list
+        - Update _minfreq if needed
+        """
+        freq = node.freq
+        self._freq[freq].pop(node)  # Remove from current frequency list
+
+        # If current list is empty and freq is the minimum frequency, update _minfreq
+        if self._minfreq == freq and len(self._freq[freq]) == 0:
+            self._minfreq += 1
+
+        # Increase node's frequency and reinsert into the new list
+        node.freq += 1
+        self._freq[node.freq].append(node)
+
+    def get(self, key):
+        """
+        Return value of the key if present, else -1.
+        Also update the key's frequency.
+        """
+        if key not in self._node:
+            return -1
+
+        node = self._node[key]
+        self._update(node)
+        return node.val
+
+    def put(self, key, value):
+        """
+        Add or update key with value. If the cache exceeds capacity,
+        evict the least frequently used (LFU) key.
+        """
+        if self._capacity == 0:
+            return
+
+        if key in self._node:
+            # If key exists, update value and frequency
+            node = self._node[key]
+            node.val = value
+            self._update(node)
+        else:
+            # If cache is full, evict least frequently used node
+            if self._size == self._capacity:
+                # Get the LFU list (minfreq), and evict LRU from it (tail)
+                lfu_list = self._freq[self._minfreq]
+                node_to_remove = lfu_list.pop()
+                del self._node[node_to_remove.key]
+                self._size -= 1
+
+            # Insert new node with freq = 1
+            new_node = Node(key, value)
+            self._node[key] = new_node
+            self._freq[1].append(new_node)
+            self._minfreq = 1            # Reset minfreq to 1
+            self._size += 1
