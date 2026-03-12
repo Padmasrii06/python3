@@ -1,0 +1,31 @@
+
+
+
+class Solution:
+    def findMaximizedCapital(self, k: int, w: int, profits: List[int], capital: List[int]) -> int:
+        
+        arr=[(c,p) for c,p in zip(capital ,profits)]
+        arr.sort() #  sort arr based on capital
+
+        maxprof=[]
+        heapify(maxprof)
+        cnt,i=0,0
+
+        while cnt<k: # worst case runs k times
+            while i<len(profits) and arr[i][0] <=w: # if ith capital <=w then push to heap
+                heappush(maxprof,-arr[i][1]) # maxheap
+                i+=1
+            
+            if maxprof: # from capital take max capital
+                temp=(-heappop(maxprof))
+                w+=temp
+                
+                cnt+= 1 
+            else:  # if heap is empty , in next iteration also we can't extract anything which satisfies ith capital <=w 
+                return w
+        
+        return w
+
+
+
+
