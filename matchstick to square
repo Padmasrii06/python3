@@ -1,0 +1,26 @@
+class Solution:
+    def helper(self, ind, s1, s2, s3, s4, target, matks):
+        if ind == len(matks):
+            return s1 == s2 == s3 == s4 == target
+
+        stick = matks[ind]
+
+        if s1 + stick <= target and self.helper(ind+1, s1+stick, s2, s3, s4, target, matks):
+            return True
+        if s2 + stick <= target and self.helper(ind+1, s1, s2+stick, s3, s4, target, matks):
+            return True
+        if s3 + stick <= target and self.helper(ind+1, s1, s2, s3+stick, s4, target, matks):
+            return True
+        if s4 + stick <= target and self.helper(ind+1, s1, s2, s3, s4+stick, target, matks):
+            return True
+
+        return False
+
+    def makesquare(self, matks: List[int]) -> bool:
+        total = sum(matks)
+        if total % 4 != 0:
+            return False
+
+        target = total // 4
+        matks.sort(reverse=True) 
+        return self.helper(0, 0, 0, 0, 0, target, matks)
