@@ -1,0 +1,47 @@
+from pprint import pprint
+from dataclasses import dataclass
+
+@dataclass
+class Node:
+    value: Optional[str]
+    children: dict
+
+class Solution:
+    def findAllConcatenatedWordsInADict(self, words: List[str]) -> List[str]:
+        root = Node(value=None, children={})
+        
+        # build trie
+        for word in words:
+            node = root
+            for i, char in enumerate(word):
+                value = word if (i == len(word) - 1) else None
+                if char not in node.children:
+                    node.children[char] = Node(value=value, children={})
+                node = node.children[char]
+                node.value = node.value or value
+
+        # dfs search generator
+        def concat_count(word, pos, count, node):
+            if pos == len(word):
+                if not word:
+                    yield count
+                return
+            char = word[pos]
+            if char not in node.children:
+                return
+            next_node = node.children[char]
+            yield from concat_count(word, pos + 1, count, next_node)
+            if next_node.value:
+                new_word = word[word.find(next_node.value) + len(next_node.value):]
+                yield from concat_count(new_word, 0, count + 1, root)
+
+
+        result = []
+
+        for word in words:
+            for count in concat_count(word, 0, 0, root):
+                if count > 1:
+                    result.append(word)
+                    break
+
+        return result
