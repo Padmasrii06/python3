@@ -1,0 +1,14 @@
+class Solution:
+    def findPoisonedDuration(self, timeSeries: List[int], duration: int) -> int:
+        res = duration
+
+        for i in range(1, len(timeSeries)):
+            # no overlap
+            if timeSeries[i] > timeSeries[i-1] + duration - 1:
+                res += duration
+
+            # yes overlap
+            else:
+                res += timeSeries[i] - timeSeries[i-1]
+
+        return res
