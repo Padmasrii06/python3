@@ -1,0 +1,16 @@
+class Solution:
+    def convertToBase7(self, num: int) -> str:
+        if num==0:
+            return '0'
+        else:
+            def base(num):
+                if num==0:
+                    return ''
+                else:
+                    rem=num%7
+                    return base(num//7)+str(rem)
+            if num>0:
+                return base(abs(num))
+            else:
+                return f'-{base(abs(num))}'
+            
