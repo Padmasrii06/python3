@@ -1,0 +1,23 @@
+import random
+
+class Solution:
+    def __init__(self, rects):
+        self.rects = rects
+        self.num_points = 0
+        for x1, y1, x2, y2 in rects:
+            width = x2 - x1 + 1
+            height = y2 - y1 + 1
+            self.num_points += width * height
+
+    def pick(self):
+        point = random.randrange(0, self.num_points)
+
+        for x1, y1, x2, y2 in self.rects:
+            width = x2 - x1 + 1
+            height = y2 - y1 + 1
+            rect_points = width * height
+            if point < rect_points:
+                x, y = divmod(point, height)
+                return [x1 + x, y1 + y]
+            else:
+                point -= rect_points
