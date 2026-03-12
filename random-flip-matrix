@@ -1,0 +1,20 @@
+class Solution:
+
+    def __init__(self, m: int, n: int):
+        self.m = m
+        self.n = n
+        self.total = m * n
+        self.reset()
+
+    def flip(self) -> List[int]:
+        rand_index = random.randint(0, self.total - 1)
+        # Trova la posizione dell'indice casuale
+        x = self.map.get(rand_index, rand_index)
+        # Sostituisce l'indice con l'ultimo non usato
+        self.map[rand_index] = self.map.get(self.total - 1, self.total - 1)
+        self.total -= 1
+        return [x // self.n, x % self.n]
+
+    def reset(self) -> None:
+        self.total = self.m * self.n
+        self.map = {}
