@@ -1,0 +1,65 @@
+class Solution:
+    def getNext(self, current: int, nums: List[int]) -> int:
+        len_ = len(nums)
+        jump = nums[current]
+        if abs(jump) == len_:
+            return current
+        next_ = current + jump
+        if next_ >= len_:
+            next_ %= len_
+        else:
+            while next_ < 0:
+                next_ += len_
+        return next_
+
+    def circularArrayLoop(self, nums: List[int]) -> bool:
+        indegree = [0] * len(nums)
+        for position in range(len(nums)):
+            next_ = self.getNext(position, nums)
+            if position == next_:
+                continue
+            indegree[next_] += 1
+            
+        eliminate = set()
+        zero_indegree = set()
+
+        for position, in_ in enumerate(indegree):
+            if not in_:
+                zero_indegree.add(position)
+        
+        while zero_indegree:
+            node = zero_indegree.pop()
+            eliminate.add(node)
+            next_ = self.getNext(node, nums)
+            if next_ == node:
+                continue
+            indegree[next_] -= 1
+            if not indegree[next_]:
+                zero_indegree.add(next_)
+        
+        if len(nums) - len(eliminate) <= 1:
+            return False
+        
+        processed = set(eliminate)
+
+        for position in range(len(nums)):
+            if position in processed or position == self.getNext(position, nums):
+                continue
+            current = position
+            min_ = nums[current]
+            max_ = nums[current]
+            start = current
+            while True:
+                processed.add(current)
+                min_ = min(min_, nums[current])
+                max_ = max(max_, nums[current])
+                next_ = self.getNext(current, nums)
+                if next_ == start:
+                    if max_ < 0 or min_ > 0:
+                        return True
+                    break
+                elif current == next_:
+                    break
+                current = next_
+
+        return False
