@@ -1,0 +1,30 @@
+
+class Solution:
+    def numberOfBoomerangs(self, points: List[List[int]]) -> int:
+        def distance_sqr(p1, p2):
+            # no need to calculate the actual distance
+            # since comparing distance_sqr is enough
+            return (p1[0]-p2[0])**2 + (p1[1]-p2[1])**2
+
+        ret = 0
+        for i in range(len(points)):
+            p1 = points[i]
+            distances = {}
+            # print(f"Distances for point {p1}\n---")
+            for j in range(len(points)):
+                if i==j:
+                    continue
+                p2 = points[j]
+                d = distance_sqr(p1, p2)
+                # print(f"Distance between {p1} and {p2}: {d}")
+                # Update the value of the distance key if exists
+                # Otherwise, add it to the dict
+                distances.update({d: distances.get(d, 0) + 1})
+
+            for n in distances.values():
+                # We have n points with equal distance to p1
+                # We need to group these n points into 2 empty slots
+                # We can use the permuation(n, 2) to achieve this
+                # Perm(n, 2) = n! / (n-2)! = n * (n-1)
+                ret += n * (n-1)
+        return ret
